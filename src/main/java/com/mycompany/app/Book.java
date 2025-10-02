@@ -30,17 +30,4 @@ public class Book {
         return disponible == book.disponible && Objects.equals(titre, book.titre) && Objects.equals(auteur, book.auteur);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(titre, auteur, disponible);
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "titre='" + titre + '\'' +
-                ", auteur='" + auteur + '\'' +
-                ", disponible=" + disponible +
-                '}';
-    }
 }

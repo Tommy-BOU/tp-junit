@@ -3,10 +3,10 @@ package com.mycompany.app;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class LibraryTest {
 
@@ -24,6 +24,7 @@ public class LibraryTest {
     @AfterEach
     void testEnd(){
         System.out.println("Success");
+        System.out.println("========================================================================");
     }
 
     @BeforeAll
@@ -74,6 +75,12 @@ public class LibraryTest {
         assertTrue(library.returnBook("Mock Book"));
     }
 
+    @Test
+    void returnBook_shouldReturnFalseIfBookDoesNotExist() {
+        System.out.println("Test retour de livre si non existant");
+        assertFalse(library.returnBook("Non existing"));
+    }
+
     @ParameterizedTest
     @CsvSource({"1, 1", "5, 2", "30, 13"})
     void countAvailableBooks_shouldReturnNumberOfAvailableBooks(int addedBooks, int borrowedBooks) {
@@ -92,7 +99,6 @@ public class LibraryTest {
     void isBookAvailable_shouldReturnTrueIfBookIsAvailable()
     {
         System.out.println("Test service disponibilité de livre");
-        library.addBook(book);
         when(mockExternalService.isBookAvailable("Mock Book")).thenReturn(true);
         assertTrue(library.checkExternalAvailability("Mock Book"));
     }
@@ -101,7 +107,6 @@ public class LibraryTest {
     void isBookAvailable_shouldReturnFalseIfBookIsNotAvailable()
     {
         System.out.println("Test service disponibilité de livre");
-        library.addBook(book);
         when(mockExternalService.isBookAvailable("Mock Book")).thenReturn(false);
         assertFalse(library.checkExternalAvailability("Mock Book"));
     }
@@ -112,13 +117,27 @@ public class LibraryTest {
         when(mockExternalService.fetchBookDetails("Mock Book")).thenReturn(book);
         library.importBookFromExternal("Mock Book");
         assertEquals(book, library.getLivres().get(0));
-
+        verify(mockExternalService, times(1)).fetchBookDetails("Mock Book");
     }
 
     @Test
-    void fetchBookDetails_shouldReturnNullIfBookDoesNotExist(){
+    void fetchBookDetails_shouldThrowExceptionIfBookIsNull(){
         System.out.println("Test service details de livre");
         when(mockExternalService.fetchBookDetails("Mock Book")).thenReturn(null);
-
+        assertThrows(IllegalArgumentException.class, () -> library.importBookFromExternal("Mock Book"));
+        verify(mockExternalService, times(1)).fetchBookDetails("Mock Book");
     }
+
+
+    @ParameterizedTest
+    @ValueSource(ints = {2, 10, 36})
+    void checkExternalAvailability_shouldReturnTrueIfBookIsAvailable(int numVerifications){
+        System.out.println("Test service disponibilité de livre");
+            when(mockExternalService.isBookAvailable("Mock Book")).thenReturn(true);
+        for (int i = 0; i < numVerifications; i++) {
+            library.checkExternalAvailability("Mock Book");
+        }
+        verify(mockExternalService, times(numVerifications)).isBookAvailable("Mock Book");
+    }
+
 }

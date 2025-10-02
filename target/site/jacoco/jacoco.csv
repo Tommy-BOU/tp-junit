@@ -1,4 +1,4 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 tp-junit,com.mycompany.app,App,7,0,0,0,3,0,2,0,2,0
-tp-junit,com.mycompany.app,Book,42,52,4,4,5,12,9,5,5,5
-tp-junit,com.mycompany.app,Library,27,113,6,16,6,30,7,13,1,8
+tp-junit,com.mycompany.app,Book,14,52,4,4,3,12,7,5,3,5
+tp-junit,com.mycompany.app,Library,19,121,4,18,4,32,5,15,1,8
